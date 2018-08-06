@@ -1,0 +1,92 @@
+$grey: #808080;
+$deepblue: #1a73e8;
+
+.header--top {
+  border-bottom: 2px solid $grey;
+  overflow: auto;
+
+  div {
+    float: left;
+    font-size: 14pt;
+    position: relative;
+    width: 20%;
+  }
+
+  div:first-child {
+    border-bottom: 1px solid $deepblue;
+    bottom: 0;
+  }
+
+  div+div {
+    font-weight: bold;
+    text-align: center;
+    width: 80%;
+  }
+}
+
+.indicator {
+  text-align: center;
+  ul {
+    list-style: none;
+    li {
+      display: inline-block;
+      margin-right: 10px;
+      padding: 10px;
+      div {
+        float: left;
+        margin-right: 5px;
+        position: relative;
+      }
+    }
+  }
+}
+
+.status-box {
+  width: 20px;
+  height: 20px;
+}
+
+*[data-type="AWL"] {
+  background-color: $grey;
+}
+
+*[data-type="WL"] {
+  background-color: green;
+}
+
+*[data-type="SA"] {
+  background-color: $deepblue;
+}
+
+*[data-type="AG"] {
+  background-color: #ffaa00;
+}
+
+.schedule-container {
+  border: 2px solid $grey;
+  box-shadow: 2px 2px 10px $grey;
+  position: relative;
+  float: left;
+  width: 48%;
+  padding: 15px;
+  margin-left: 15px;
+  text-align: center;
+  table {
+    border-collapse: collapse;
+    tr {
+      height: 25px;
+    }
+    td{
+      border: 1px solid #ffffff;
+      padding: 5px;
+      text-align: center;
+      // min-height: 50px;
+    }
+    th {
+      padding: 5px;
+      padding-bottom: 0;
+      text-align: center;
+      min-width: 50px;
+    }
+  }
+}
