@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import Input from '../components/Input';
 import Cell from './Cell';
+import requireAuth from '../components/requireAuth';
 
 class SchedulingTable extends Component {
   constructor(props){
@@ -20,17 +21,28 @@ class SchedulingTable extends Component {
   }
 
   render(){
-    const {heading, dropdown} = this.props;
-    let el;
+    const {heading, dropdown, descText, isLink} = this.props;
+    let el,textEl;
+
     if(heading)
       el = <Input heading={heading}/>;
     else if(dropdown)
       el = <Input dropdown={dropdown}/>;
+
+    if(isLink.valueOf() === "yes".valueOf())
+      textEl = <a href="#">{descText}</a>;
+    else if(isLink.valueOf() === "no".valueOf())
+      textEl = <span>{descText}</span>;
+
+
     return (
       <div className="schedule-container">
         {this.props.startDate}-{this.props.endDate}
 
         {el}
+
+        {textEl}
+
         <table>
           <thead>
             <tr>
@@ -66,4 +78,4 @@ class SchedulingTable extends Component {
   }
 }
 
-export default SchedulingTable;
+export default requireAuth(SchedulingTable);

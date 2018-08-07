@@ -10,7 +10,7 @@ const VENDOR_LIBS = [
 
 module.exports = {
   entry: {
-    bundle: './src/index.js',
+    bundle: ['babel-polyfill','./src/index.js'],
     vendor: VENDOR_LIBS
   },
   output: {
@@ -35,7 +35,7 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['react']
+              presets: ['env','react','stage-2']
             }
           }
         ]

@@ -15,7 +15,7 @@ class App extends Component {
       var date = new Date();
       var curr_date =new Date();
       var day = curr_date.getDay();
-      console.log(day);
+      // console.log(day);
       var diff = curr_date.getDate() - day + (day == 0 ? -6:1); // 0 for sunday
       var week_start_tstmp = curr_date.setDate(diff);
       var week_start = new Date(week_start_tstmp).add;
@@ -38,12 +38,17 @@ class App extends Component {
         <SchedulingTable
           startDate={this.startDate} endDate={this.endDate}
           dropdown={['Mumbai','Navi Mumbai','Thane']}
+          descText="Map"
+          isLink="yes"
         />
 
         <SchedulingTable
           startDate={this.startDate} endDate={this.endDate}
           heading="Your Schedule Across Zones"
+          descText="Click the timeslot to view your delivery zone!"
+          isLink="no"
         />
+
       </div>
 
     );
