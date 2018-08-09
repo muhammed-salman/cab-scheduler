@@ -1,4 +1,4 @@
-import { AUTH_USER, AUTH_ERROR } from '../actions/types';
+import { UPDATE_SCHEDULE, UPDATE_ERROR } from '../actions/types';
 
 const INITIAL_STATE = {
   authenticated: '',
@@ -9,9 +9,9 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case AUTH_USER:
-      return { ...state, authenticated: action.payload };
-    case AUTH_ERROR:
+    case UPDATE_SCHEDULE:
+      return { ...state, schedule: action.payload };
+    case UPDATE_ERROR:
       return { ...state, errorMessage: action.payload };
     default:
       return state;

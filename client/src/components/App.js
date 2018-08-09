@@ -18,8 +18,8 @@ class App extends Component {
       // console.log(day);
       var diff = curr_date.getDate() - day + (day == 0 ? -6:1); // 0 for sunday
       var week_start_tstmp = curr_date.setDate(diff);
-      var week_start = new Date(week_start_tstmp).add;
-      var week_start_date =moment(week_start).add(7-(day-1), 'days').format("Do MMM, YYYY");
+      var week_start = new Date(week_start_tstmp);
+      var week_start_date =moment(week_start).add(7, 'days').format("Do MMM, YYYY");
       var week_end  = new Date(week_start_tstmp);  // first day of week
       week_end = new Date (week_end.setDate(week_end.getDate() + 6));
       var week_end_date =moment(week_end).add(7, 'days').format("Do MMM, YYYY");
