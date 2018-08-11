@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var moment = require('moment');
 var Zone = require('../models/Zone');
 var Slot = require('../models/Slot');
-var Schedule = require('../models/Schedule');
 
 var startDate;
 function getNextWeek(){
@@ -64,5 +63,4 @@ db.once('open', function() {
       }
     });
   }
-
 });

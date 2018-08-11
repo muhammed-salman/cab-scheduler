@@ -1,7 +1,5 @@
 const Zone = require('../models/Zone');
 
-
-
 exports.getZoneInfo = function(req, res, next) {
   const {name} = req.body;
   if (!name) {

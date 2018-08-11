@@ -9,8 +9,14 @@ const slotSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Zone'
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+    default: null
+  },
   date: String,
   status: String,
+  waitlist: []
 });
 
 // Create the model class
