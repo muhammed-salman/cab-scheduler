@@ -9,14 +9,15 @@ class Input extends Component {
   constructor(props){
     super(props);
 		// this.onClick=this.onClick.bind(this);
+    console.log(props);
 		this.onChange=this.onChange.bind(this);
   }
 
   onChange(event){
     let zone = event.target.value;
-    let startDate = moment(startDate).format('YYYY-MM-DD');
-    console.log(this.props);
+    let startDate = moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD');
     this.props.fetchZoneSlots(zone,startDate);
+
   }
 
   createOptions = () => {

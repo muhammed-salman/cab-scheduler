@@ -1,58 +1,68 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import axios from 'axios';
+import _ from 'lodash';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import Header from './Header';
 import Indicator from './Indicator';
 import SchedulingTable from '../containers/SchedulingTable';
+import {fetchZones, getNextWeek} from '../actions/index';
+
 class App extends Component {
   constructor(props){
     super(props);
-    this.startDate="";
-    this.endDate="";
+
   }
 
-  getNextWeek(){
-      var date = new Date();
-      var curr_date =new Date();
-      var day = curr_date.getDay();
-      // console.log(day);
-      var diff = curr_date.getDate() - day + (day == 0 ? -6:1); // 0 for sunday
-      var week_start_tstmp = curr_date.setDate(diff);
-      var week_start = new Date(week_start_tstmp);
-      var week_start_date =moment(week_start).add(7, 'days').format("Do MMM, YYYY");
-      var week_end  = new Date(week_start_tstmp);  // first day of week
-      week_end = new Date (week_end.setDate(week_end.getDate() + 6));
-      var week_end_date =moment(week_end).add(7, 'days').format("Do MMM, YYYY");
-      this.startDate = week_start_date;
-      this.endDate = week_end_date;
+  componentWillMount(){
+    this.props.fetchZones();
+    this.props.getNextWeek();
+    // this.getNextWeek();
   }
 
   render(){
-    this.getNextWeek();
-    return (
-      <div>
-        <Header startDate={this.startDate} endDate={this.endDate}/>
+    // const { startDate: {startDate}, endDate: {endDate}} = this.props;
+    console.log(this.props);
+    if(! _.isEmpty(this.props.zones)){
 
-        <Indicator/>
+      return (
+        <div>
+          <Header startDate={this.props.startDate} endDate={this.props.endDate}/>
 
-        <SchedulingTable
-          startDate={this.startDate} endDate={this.endDate}
-          dropdown={['Mumbai','Navi Mumbai','Thane']}
-          descText="Map"
-          isLink="yes"
-        />
+          <Indicator/>
 
-        <SchedulingTable
-          startDate={this.startDate} endDate={this.endDate}
-          heading="Your Schedule Across Zones"
-          descText="Click the timeslot to view your delivery zone!"
-          isLink="no"
-        />
+          <SchedulingTable
+            startDate={this.props.startDate} endDate={this.props.endDate}
+            dropdown={this.props.zones}
+            descText="Map"
+            isLink="yes"
+          />
 
-      </div>
+          <SchedulingTable
+            startDate={this.props.startDate} endDate={this.props.endDate}
+            heading="Your Schedule Across Zones"
+            descText="Click the timeslot to view your delivery zone!"
+            isLink="no"
+          />
 
-    );
+        </div>
+
+      );
+    }
+    else {
+      return <div>Loading...</div>;
+    }
   }
 }
 
-export default App;
+function mapStateToProps(state){
+	return state;
+}
+
+function mapDispatchToProps(dispatch){
+	return bindActionCreators({fetchZones, getNextWeek},dispatch);
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);

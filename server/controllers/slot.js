@@ -32,6 +32,7 @@ exports.getZoneSlots = function(req, res, next) {
     .exec((err,slots) => {
       if(err)
         return next(err);
+      console.log(slots);
       return res.status(200).send(slots);
     });
   });

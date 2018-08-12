@@ -1,6 +1,8 @@
 import { UPDATE_SCHEDULE, UPDATE_ERROR } from '../actions/types';
 
-const INITIAL_STATE = [];
+const INITIAL_STATE = {
+  schedule: []
+};
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {

@@ -4,3 +4,6 @@ export const ZONE_CHANGE = 'zone_change';
 export const ZONE_ERROR = 'zone_error';
 export const UPDATE_SCHEDULE = 'update_schedule';
 export const UPDATE_ERROR = 'update_error';
+export const START_DATE = 'start_date';
+export const END_DATE = 'end_date';
+export const ZONES_AVL = 'zones_avl';
