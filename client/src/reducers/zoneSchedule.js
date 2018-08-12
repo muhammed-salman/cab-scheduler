@@ -1,18 +1,14 @@
-import { STATUS_CHANGE, STATUS_ERROR } from '../actions/types';
+import { ZONE_CHANGE, ZONE_ERROR } from '../actions/types';
 
-const INITIAL_STATE = {
-  authenticated: '',
-  errorMessage: '',
-  zoneSchedule: [],
-  schedule: []
-};
+const INITIAL_STATE = [];
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case  STATUS_CHANGE:
-      return { ...state, zoneSchedule: action.payload};
-    case STATUS_ERROR:
-      return { ...state, errorMessage: action.payload };  
+    case  ZONE_CHANGE:
+      console.log(action.payload);
+      return { ...state, zoneSchedule: action.payload.zoneSchedule};
+    case ZONE_ERROR:
+      return { ...state, errorMessage: action.payload.errorMessage };
     default:
       return state;
   }

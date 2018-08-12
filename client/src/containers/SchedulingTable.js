@@ -8,13 +8,21 @@ class SchedulingTable extends Component {
   constructor(props){
 		super(props);
 		this.state={
-      startDate: '',
-      endDate: '',
+      startDate: this.props.startDate,
+      endDate: this.props.endDate
     };
+    this.onChange = this.onChange.bind(this);
+    this.onClick = this.onClick.bind(this);
     // this.getNextWeek= this.getNextWeek.bind(this);
 	}
 
+  onChange(event){
+    alert('You Changed Zone');
+	}
 
+  onClick(event){
+    alert('You Just Clicked');
+  }
 
   componentDidMount(){
     // this.getNextWeek();
@@ -23,11 +31,16 @@ class SchedulingTable extends Component {
   render(){
     const {heading, dropdown, descText, isLink} = this.props;
     let el,textEl;
-
+    // console.log(this.state);
     if(heading)
       el = <Input heading={heading}/>;
-    else if(dropdown)
-      el = <Input dropdown={dropdown}/>;
+    else if(dropdown){
+      el = <Input dropdown={dropdown}
+            onChange = {this.onChange}
+            onClick = {this.onClick}
+          />;
+
+    }
 
     if(isLink.valueOf() === "yes".valueOf())
       textEl = <a href="#">{descText}</a>;

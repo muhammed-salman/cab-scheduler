@@ -90,3 +90,16 @@ $deepblue: #1a73e8;
     }
   }
 }
+
+.navigator {
+  a{
+    text-decoration: none;
+    color: #000;
+  }
+  a+div{
+    a{
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
+}

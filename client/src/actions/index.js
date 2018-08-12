@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { AUTH_USER, AUTH_ERROR, STATUS_CHANGE, UPDATE_SCHEDULE } from './types';
+import moment from 'moment';
+import { AUTH_USER, AUTH_ERROR, ZONE_CHANGE, ZONE_ERROR, UPDATE_SCHEDULE, UPDATE_ERROR } from './types';
 
 export const signup = (formProps, callback) => async dispatch => {
   try {
@@ -38,4 +39,37 @@ export const signout = () => {
     type: AUTH_USER,
     payload: ''
   };
+};
+
+export const fetchZoneSlots = (name, startDate) => async dispatch => {
+  var zoneSchedule=[], temp=[],i,j;
+  try {
+    for(i=0;i<7;i++){
+      startDate = moment(startDate).add(i,day).format('YYYY-MM-DD');
+
+      console.log(startDate);
+
+      const response = await axios.post(
+        'http://localhost:3090/zoneslots',
+        {name, date: startDate}
+      );
+
+      console.log(response);
+
+      for(j=0;j<14;j++){
+        temp[i][j]=response[j];
+      }
+    }
+
+    for(i=0;i<14;i++)
+    {
+      for(j=0;j<7;j++){
+        zoneSchedule[i][j] = temp[j][i];
+      }
+    }
+
+    dispatch({ type: ZONE_CHANGE, payload: zoneSchedule });
+  } catch (e) {
+    dispatch({ type: ZONE_ERROR, payload: 'Zone information cannot be fetch' });
+  }
 };

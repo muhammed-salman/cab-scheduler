@@ -3,12 +3,10 @@ import { AUTH_USER, AUTH_ERROR } from '../actions/types';
 const INITIAL_STATE = {
   authenticated: '',
   errorMessage: '',
-  zoneSchedule: [],
-  schedule: []
 };
 
 export default function(state = INITIAL_STATE, action) {
-  console.log(state);
+  // console.log(state);
   switch (action.type) {
     case AUTH_USER:
       return { ...state, authenticated: action.payload };
