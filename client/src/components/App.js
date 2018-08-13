@@ -8,12 +8,19 @@ import {bindActionCreators} from 'redux';
 import Header from './Header';
 import Indicator from './Indicator';
 import SchedulingTable from '../containers/SchedulingTable';
-import {fetchZones, getNextWeek} from '../actions/index';
+import {fetchZones, getNextWeek, fetchUserSlots} from '../actions/index';
 
 class App extends Component {
   constructor(props){
     super(props);
-
+    this.state={
+      auth: this.props.auth,
+      startDate: this.props.startDate,
+      endDate: this.props.endDate,
+      schedule: this.props.schedule,
+      zoneSchedule: this.props.zoneSchedule,
+      zones: this.props.zones
+    };
   }
 
   componentWillMount(){
@@ -22,6 +29,23 @@ class App extends Component {
     // this.getNextWeek();
   }
 
+
+
+  // componentWillReceiveProps(nextProps){
+  //   if(JSON.stringify(this.props.startDate)!=JSON.stringify(nextProps.startDate))
+  //     nextProps.fetchUserSlots(nextProps.auth.authenticated.email, nextProps.startDate);
+  // }
+
+  componentDidMount() {
+      // this.props.fetchUserSlots(this.props.auth.authenticated.email, this.props.startDate);
+  }
+
+  componentDidUpdate(prevProps) {
+      if(JSON.stringify(this.props.startDate)!=JSON.stringify(prevProps.startDate))
+      {
+        this.props.fetchUserSlots(this.props.auth.authenticated.email, moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD'));
+      }
+  }
   render(){
     // const { startDate: {startDate}, endDate: {endDate}} = this.props;
     console.log(this.props);
@@ -36,12 +60,14 @@ class App extends Component {
           <SchedulingTable
             startDate={this.props.startDate} endDate={this.props.endDate}
             dropdown={this.props.zones}
+            zoneSchedule={this.props.zoneSchedule}
             descText="Map"
             isLink="yes"
           />
 
           <SchedulingTable
             startDate={this.props.startDate} endDate={this.props.endDate}
+            schedule={this.props.schedule}
             heading="Your Schedule Across Zones"
             descText="Click the timeslot to view your delivery zone!"
             isLink="no"
@@ -62,7 +88,7 @@ function mapStateToProps(state){
 }
 
 function mapDispatchToProps(dispatch){
-	return bindActionCreators({fetchZones, getNextWeek},dispatch);
+	return bindActionCreators({fetchZones, getNextWeek, fetchUserSlots},dispatch);
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(App);

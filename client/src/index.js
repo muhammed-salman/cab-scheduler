@@ -21,7 +21,10 @@ import registerServiceWorker from './registerServiceWorker';
 const store = createStore(
   reducers,
   {
-    auth: { authenticated: localStorage.getItem('token') }
+    auth: { authenticated: {
+      token: localStorage.getItem('token'),
+      email: localStorage.getItem('email')
+    } }
   },
   applyMiddleware(reduxThunk)
 );

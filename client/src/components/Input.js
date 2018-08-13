@@ -9,7 +9,7 @@ class Input extends Component {
   constructor(props){
     super(props);
 		// this.onClick=this.onClick.bind(this);
-    console.log(props);
+    // console.log(props);
 		this.onChange=this.onChange.bind(this);
   }
 

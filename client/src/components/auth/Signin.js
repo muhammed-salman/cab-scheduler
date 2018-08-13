@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 class Signin extends Component {
-  onSubmit = (formProps) => {
+  onSubmit = (formProps) => { 
     this.props.signin(formProps, () => {
       this.props.history.push('/scheduler');
     });

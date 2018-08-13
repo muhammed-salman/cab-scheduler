@@ -1,5 +1,7 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
+import _ from 'lodash';
 import Input from '../components/Input';
 import Cell from './Cell';
 import requireAuth from '../components/requireAuth';
@@ -9,15 +11,12 @@ class SchedulingTable extends Component {
 		super(props);
 		this.state={
       startDate: this.props.startDate,
-      endDate: this.props.endDate
+      endDate: this.props.endDate,
+      zoneSchedule: this.props.zoneSchedule,
+      schedule: this.props.schedule,
+      zones: this.props.zones
     };
-    this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
-    // this.getNextWeek= this.getNextWeek.bind(this);
-	}
-
-  onChange(event){
-    alert('You Changed Zone');
 	}
 
   onClick(event){
@@ -28,17 +27,49 @@ class SchedulingTable extends Component {
     // this.getNextWeek();
   }
 
+  generateRows = () => {
+      let table = [];
+      let time="08:00am";
+      if(!_.isEmpty(this.props.zoneSchedule)){
+        //create rows
+        for (let i = 0; i < 14; i++) {
+          let children = [];
+          //create cells
+          for (let j = 0; j < 8; j++) {
+            if(j==0)
+            children.push(<td>{time}</td>);
+            else
+            children.push(
+              <Cell
+                status={this.props.zoneSchedule[i][j-1].status}
+                date={this.props.zoneSchedule[i][j-1].date}
+                slotId={this.props.zoneSchedule[i][j-1]._id}
+                slotSerial={this.props.zoneSchedule[i][j-1].id}
+                startTime={this.props.zoneSchedule[i][j-1].startTime}
+                endTime={this.props.zoneSchedule[i][j-1].endTime}
+                user={this.props.zoneSchedule[i][j-1].user}
+              />
+            );
+          }
+          //create rows and add columns
+          table.push(<tr>{children}</tr>);
+          time=moment(time,'hh:mma').add(1,'h').format('hh:mma');
+          table.push(<tr>{time}</tr>);
+        }
+
+      }
+      return table;
+  }
+
   render(){
     const {heading, dropdown, descText, isLink} = this.props;
     let el,textEl;
+
     // console.log(this.state);
     if(heading)
       el = <Input heading={heading}/>;
     else if(dropdown){
-      el = <Input dropdown={dropdown}
-            onChange = {this.onChange}
-            onClick = {this.onClick}
-          />;
+      el = <Input dropdown={dropdown}/>;
 
     }
 
@@ -70,19 +101,7 @@ class SchedulingTable extends Component {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>07:45am</td>
-              <Cell />
-              <Cell />
-              <Cell />
-              <Cell />
-              <Cell />
-              <Cell />
-              <Cell />
-            </tr>
-            <tr>
-              <td>08:45am</td>
-            </tr>
+            {this.generateRows()}
           </tbody>
         </table>
       </div>

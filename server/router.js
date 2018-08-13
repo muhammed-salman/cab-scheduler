@@ -1,6 +1,7 @@
 const Authentication = require('./controllers/authentication');
 const Zone = require('./controllers/zone');
 const Slot = require('./controllers/slot');
+const User = require('./controllers/userinfo');
 
 const passportService = require('./services/passport');
 const passport = require('passport');
@@ -16,6 +17,7 @@ module.exports = function(app) {
   app.post('/signup', Authentication.signup);
   app.post('/zonelist', Zone.getZoneList);
   app.post('/zoneinfo', Zone.getZoneInfo);
+  app.post('/userinfo', User.getUserInfo);
   app.post('/slotinfo', Slot.getSlotInfo);
   app.post('/zoneslots', Slot.getZoneSlots);
   app.post('/slotbydatetime', Slot.getSlotByStartTimeDate);

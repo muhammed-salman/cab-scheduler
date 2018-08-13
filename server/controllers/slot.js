@@ -85,6 +85,7 @@ exports.getUserSlots = function(req, res, next) {
 
   Slot
     .find({user: mongoose.Types.ObjectId(id), date})
+    .sort({id: 1})
     .exec((err,slots) => {
       if(err)
         return next(err);
