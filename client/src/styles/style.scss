@@ -62,6 +62,11 @@ $deepblue: #1a73e8;
   background-color: #ffaa00;
 }
 
+*[data-id="tooltip"]{
+  background-color: #4a92fd;
+  color: #fff;
+}
+
 .schedule-container {
   border: 2px solid $grey;
   box-shadow: 2px 2px 10px $grey;

@@ -3,38 +3,36 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import moment from 'moment';
-import {fetchZoneSlots} from '../actions/index';
+import {fetchZoneSlots, setZone} from '../actions/index';
 
 class Input extends Component {
   constructor(props){
     super(props);
-		// this.onClick=this.onClick.bind(this);
-    // console.log(props);
 		this.onChange=this.onChange.bind(this);
   }
 
   onChange(event){
     let zone = event.target.value;
-    let startDate = moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD');
-    this.props.fetchZoneSlots(zone,startDate);
-
+    if(zone!=""){
+      this.props.setZone(zone);
+      let startDate = moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD');
+      this.props.fetchZoneSlots(zone,startDate);
+    }
   }
 
   createOptions = () => {
-    let options = []
+    let options = [];
     let dropdown = this.props.dropdown;
-    // Outer loop to create parent
+    options.push(<option key="" value="">------</option>);
     for (let i = 0; i < dropdown.length; i++) {
-      //Create the parent and add the children
-      options.push(<option value={dropdown[i]} key={i}>{dropdown[i]}</option>)
+      options.push(<option value={dropdown[i]} key={i}>{dropdown[i]}</option>);
     }
     return options;
   }
 
   render(){
-    // const element;
+
     if(this.props.heading){
-      // console.log(this.props.heading);
       return (
         <h4>
           {this.props.heading}
@@ -58,7 +56,7 @@ function mapStateToProps(state){
 }
 
 function mapDispatchToProps(dispatch){
-	return bindActionCreators({fetchZoneSlots},dispatch);
+	return bindActionCreators({fetchZoneSlots, setZone},dispatch);
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(Input);

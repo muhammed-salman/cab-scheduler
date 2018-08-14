@@ -26,15 +26,8 @@ class App extends Component {
   componentWillMount(){
     this.props.fetchZones();
     this.props.getNextWeek();
-    // this.getNextWeek();
   }
 
-
-
-  // componentWillReceiveProps(nextProps){
-  //   if(JSON.stringify(this.props.startDate)!=JSON.stringify(nextProps.startDate))
-  //     nextProps.fetchUserSlots(nextProps.auth.authenticated.email, nextProps.startDate);
-  // }
 
   componentDidMount() {
       // this.props.fetchUserSlots(this.props.auth.authenticated.email, this.props.startDate);
@@ -48,7 +41,7 @@ class App extends Component {
   }
   render(){
     // const { startDate: {startDate}, endDate: {endDate}} = this.props;
-    console.log(this.props);
+    console.log('APP props',this.props);
     if(! _.isEmpty(this.props.zones)){
 
       return (
@@ -61,6 +54,8 @@ class App extends Component {
             startDate={this.props.startDate} endDate={this.props.endDate}
             dropdown={this.props.zones}
             zoneSchedule={this.props.zoneSchedule}
+            email={this.props.auth.authenticated.email}
+            type="zoneSch"
             descText="Map"
             isLink="yes"
           />
@@ -68,6 +63,8 @@ class App extends Component {
           <SchedulingTable
             startDate={this.props.startDate} endDate={this.props.endDate}
             schedule={this.props.schedule}
+            email={this.props.auth.authenticated.email}
+            type="userSch"
             heading="Your Schedule Across Zones"
             descText="Click the timeslot to view your delivery zone!"
             isLink="no"

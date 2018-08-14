@@ -1,62 +1,73 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import moment from 'moment';
+import ReactTooltip from 'react-tooltip';
+import {reserveSlot, fetchZoneSlots, fetchUserSlots, putToWaitList} from '../actions/index';
 
 
 class Cell extends Component {
 
   constructor(props){
     super(props);
-    this.state={
-      date: this.props.date,
-      slotId: this.props.slotId,
-      slotSerial: this.props.slotSerial,
-      status: this.props.status,
-      startTime: this.props.startTime,
-      endTime: this.props.endTime,
-      user: this.props.user
-    };
-
 		this.onClick=this.onClick.bind(this);
-		this.onHover=this.onHover.bind(this);
   }
 
   onClick(event){
-    alert('You Clicked');
+    let startDate = moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD');
+    if(this.props.status=="AG")
+    {
+      this.props.reserveSlot(this.props.email,this.props.slotId);
+    }
+    else if (this.props.status=="AWL") {
+      this.props.putToWaitList(this.props.email,this.props.slotId);
+    }
+
+    if(this.props.status =="AG" || this.props.status =="AWL"){
+      
+      this.props.fetchZoneSlots(this.props.zone.name,startDate);
+      this.props.fetchUserSlots(this.props.email,startDate);
+    }
+    else{
+      alert("This Shift is already present in your schedule");
+    }
 	}
-
-  onHover(event){
-
-  }
-
-  //props updated change state
-  static getDerivedStateFromProps(props, state) {
-    if (props.slotId !== state.slotId || props.status !== state.props) {
-      return {
-          date: props.date,
-          slotId: props.slotId,
-          slotSerial: props.slotSerial,
-          status: props.status,
-          startTime: props.startTime,
-          endTime: props.endTime,
-          user: props.user
-        };
-      }
-      return null;
-  }
 
   render(){
     // console.log("Cell Props: ", this.props,"Cell State",this.state);
     return (
       <td
-        data-type={this.state.status}
+        data-type={this.props.status}
         rowSpan="2"
         onClick={this.onClick}
         onMouseOver={this.onHover}
+        data-tip
+        data-for={this.props.slotId}
         >
+      <ReactTooltip id={this.props.slotId} place="top" type="info" effect="float">
+        <p>
+          Date: {this.props.date}
+        </p>
+        <p>
+          Time: {this.props.startTime}-{this.props.endTime}
+        </p>
+        <p>
+          Status: {this.props.status}
+        </p>
+      </ReactTooltip>
       </td>
+
     );
   }
 }
 
-export default Cell;
+function mapStateToProps(state){
+	return state;
+}
+
+function mapDispatchToProps(dispatch){
+	return bindActionCreators({reserveSlot, fetchZoneSlots, fetchUserSlots, putToWaitList},dispatch);
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Cell);
