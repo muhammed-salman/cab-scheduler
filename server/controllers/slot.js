@@ -61,21 +61,13 @@ exports.getSlotByStartTimeDate = function(req, res, next) {
 
 exports.getUserSlotByStartTimeDate = function(req, res, next) {
 
-  const {id, name, startTime, date} = req.body;
-
-  Zone
-  .findOne({name})
-  .select('_id')
-  .exec((err,data) => {
+  const {id, startTime, date} = req.body;
+  Slot
+  .find({user: mongoose.Types.ObjectId(id), startTime, date})
+  .exec((err,slot) => {
     if(err)
-      return next(err);
-    Slot
-      .find({zone : data._id, user: mongoose.Types.ObjectId(id), startTime, date})
-      .exec((err,slot) => {
-        if(err)
-          return next(err);
-        return res.status(200).send(slot);
-      });
+    return next(err);
+    return res.status(200).send(slot);
   });
 }
 
@@ -106,10 +98,22 @@ exports.bookSlot = function(req, res, next) {
     });
 }
 
+exports.userWaitList = function(req, res, next) {
+  const {user, date} = req.body;
+  Slot
+    .find({date, waitlist: { user: mongoose.Types.ObjectId(user)} })
+    .sort({id: 1})
+    .exec((err,slot) => {
+      if(err)
+        return next(err);
+      return res.status(200).send(slot);
+    });
+}
+
+
 exports.addToWaitList = function(req, res, next) {
 
   const {id, user} = req.body;
-  console.log(typeof id, typeof user);
 
   Slot
     .findOneAndUpdate(

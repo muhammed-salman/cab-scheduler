@@ -24,6 +24,7 @@ module.exports = function(app) {
   app.post('/userslotbydatetime', Slot.getUserSlotByStartTimeDate);
   app.post('/userslots', Slot.getUserSlots);
   app.post('/bookslot', Slot.bookSlot);
+  app.post('/userwaitlist', Slot.userWaitList);
   app.post('/addtowaitlist', Slot.addToWaitList);
 
 }

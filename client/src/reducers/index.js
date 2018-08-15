@@ -8,6 +8,7 @@ import startDate from './startdate';
 import endDate from './enddate';
 import zones from './zone';
 import zone from './setZone';
+import userWaitList from './userwaitlist';
 
 
 const appReducer = combineReducers({
@@ -18,11 +19,12 @@ const appReducer = combineReducers({
   zones,
   zoneSchedule,
   schedule,
+  userWaitList,
   form: formReducer
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === 'USER_LOGOUT') {
+  if (action.type === USER_LOGOUT) {
     state = undefined;
   }
   return appReducer(state, action);

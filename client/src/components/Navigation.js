@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 class Navigation extends Component {
   renderLinks() {
-    if (this.props.authenticated) {
+    if (this.props.authenticated.token) {
       return (
         <div>
           <Link to="/signout">Sign Out</Link>

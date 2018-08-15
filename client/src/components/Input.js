@@ -25,7 +25,7 @@ class Input extends Component {
     let dropdown = this.props.dropdown;
     options.push(<option key="" value="">------</option>);
     for (let i = 0; i < dropdown.length; i++) {
-      options.push(<option value={dropdown[i]} key={i}>{dropdown[i]}</option>);
+      options.push(<option value={dropdown[i].name} key={i}>{dropdown[i].name}</option>);
     }
     return options;
   }

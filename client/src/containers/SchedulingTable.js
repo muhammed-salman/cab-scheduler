@@ -10,15 +10,6 @@ import requireAuth from '../components/requireAuth';
 class SchedulingTable extends Component {
   constructor(props){
 		super(props);
-		this.state={
-      startDate: this.props.startDate,
-      endDate: this.props.endDate,
-      zoneSchedule: this.props.zoneSchedule,
-      schedule: this.props.schedule,
-      zones: this.props.zones,
-      type: this.props.type,
-      email: this.props.email
-    };
     this.onClick = this.onClick.bind(this);
 	}
 
@@ -30,85 +21,164 @@ class SchedulingTable extends Component {
     // this.getNextWeek();
   }
 
-  generateRows = () => {
+  generateZoneSchedule(userid){
       let table = [];
       let time="08:00am";
-      let userid = localStorage.getItem('userid');
-      if(this.props.type=='zoneSch'){
+      const {zoneSchedule} = this.props;
 
-        const {zoneSchedule} = this.props;
+      if(!_.isEmpty(zoneSchedule)){
+        //create rows
+        for (let i = 0; i < 14; i++) {
+          let children = [];
+          //create cells
+          for (let j = 0; j < 8; j++) {
+            if(j==0)
+            children.push(<td>{time}</td>);
+            else{
+              const {status, date, _id, id, startTime, endTime, user, waitlist} = this.props.zoneSchedule[i][j-1];
 
-        if(!_.isEmpty(zoneSchedule)){
-          //create rows
-          for (let i = 0; i < 14; i++) {
-            let children = [];
-            //create cells
-            for (let j = 0; j < 8; j++) {
-              if(j==0)
-              children.push(<td>{time}</td>);
-              else{
-                const {status, date, _id, id, startTime, endTime, user, waitlist} = this.props.zoneSchedule[i][j-1];
+              let waitUser=_.map(waitlist,'user');
+              // console.log("Schedule Table",waitUser);
+              let displayStatus = (_.isEqual(userid,user))?status:(status=="SA"?(_.includes(waitUser,userid)?"WL":"AWL"):status);
 
-                let displayStatus = (userid==user)?status:(status=="SA"?(_.includes(waitlist,userid)?"WL":"AWL"):status);
-
-                const {startDate, email} = this.props;
-                children.push(
-                  <Cell
-                    status={displayStatus}
-                    startDate={startDate}
-                    date={date}
-                    slotId={_id}
-                    slotSerial={id}
-                    startTime={startTime}
-                    endTime={endTime}
-                    user={user}
-                    email={email}
-                  />
-                );
-              }
-            }
-            //create rows and add columns
-            table.push(<tr>{children}</tr>);
-            time=moment(time,'hh:mma').add(1,'h').format('hh:mma');
-            table.push(<tr><td>{time}</td></tr>);
-          }
-
-        }
-
-      }
-      else if(this.props.type=="userSch"){
-        let k=0;
-        let date= moment(this.props.startDate)
-        if(!_.isEmpty(this.props.schedule)){
-          //create rows
-          for (let i = 0; i < 14; i++) {
-            let children = [];
-            //create cells
-            for (let j = 0; j < 8; j++) {
-              if(j==0)
-              children.push(<td>{time}</td>);
-              else
+              const {startDate, email} = this.props;
               children.push(
                 <Cell
-                  status={this.props.schedule[k].status}
-                  startDate={this.props.startDate}
-                  date={this.props.schedule[k].date}
-                  slotId={this.props.schedule[k]._id}
-                  slotSerial={this.props.schedule[k].id}
-                  startTime={this.props.schedule[k].startTime}
-                  endTime={this.props.schedule[k].endTime}
-                  user={this.props.schedule[k].user}
-                  email={this.props.email}
+                  status={displayStatus}
+                  startDate={startDate}
+                  date={date}
+                  slotId={_id}
+                  slotSerial={id}
+                  startTime={startTime}
+                  endTime={endTime}
+                  user={user}
+                  email={email}
+                  type={this.props.type}
                 />
               );
             }
-            //create rows and add columns
-            table.push(<tr>{children}</tr>);
-            time=moment(time,'hh:mma').add(1,'h').format('hh:mma');
-            table.push(<tr><td>{time}</td></tr>);
+          }
+          //create rows and add columns
+          table.push(<tr>{children}</tr>);
+          time=moment(time,'hh:mma').add(1,'h').format('hh:mma');
+          table.push(<tr><td>{time}</td></tr>);
+        }
+      }
+      return table;
+  }
+
+  generateUserSchedule(userid){
+    let table = [];
+    let time="08:00am";
+    let k=0, w=0;
+
+    const {schedule, zones, userWaitList} = this.props;
+
+    if(!_.isEmpty(schedule) && !_.isEmpty(zones) && !_.isEmpty(userWaitList)){
+      //create rows
+      for (let i = 0; i < 14; i++) {
+        let slotDate= moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD');
+        let children = [];
+        //create cells
+        for (let j = 0; j < 8; j++) {
+          if(j==0)
+            children.push(<td>{time}</td>);
+          else{
+            // console.log('slotDate:',slotDate);
+            let waitUser=false;
+            let {status, date, _id, id, startTime, endTime, user, zone} = this.props.schedule[k];
+
+            if(_.isEqual(date,slotDate)&&_.isEqual(startTime,time)){
+              if(k<this.props.schedule.length-1)
+                k++;
+                zones.forEach((obj) =>{
+                  if(_.isEqual(obj._id,zone)){
+                    zone=obj.name;
+                  }
+                });
+                //if you have the wait slot at same time and date of reserved slot then skip it on status display
+                if( _.isEqual(userWaitList[w].date,slotDate)
+                  && _.isEqual(userWaitList[w].startTime,time))
+                    w++;
+            }
+            else {
+              // let {status, date, _id, id, startTime, endTime, user, zone} = this.props.userWaitList[w];
+
+              if( _.isEqual(userWaitList[w].date,slotDate)
+                && _.isEqual(userWaitList[w].startTime,time))
+              {
+                waitUser=true;
+                status = userWaitList[w].status;
+                date=userWaitList[w].date;
+                _id=userWaitList[w]._id;
+                id=userWaitList[w].id;
+                startTime=userWaitList[w].startTime;
+                endTime=userWaitList[w].endTime;
+                zone = userWaitList[w].zone;
+                user=null;
+                zones.forEach((obj) =>{
+                  if(_.isEqual(obj._id,zone)){
+                    zone=obj.name;
+                  }
+                });
+
+                if(w<userWaitList.length-1)
+                  w++;
+              }
+              else{
+                date=slotDate;
+                startTime=time;
+                endTime=moment(startTime,'hh:mma').add(1,'h').format('hh:mma');
+                user=null;
+                _id=startTime+date;
+                id=i;
+                zone=null;
+              }
+            }
+
+            // let waitUser = _.map(waitlist,'user');
+            // console.log("Schedule Table",waitUser);
+            let displayStatus = (_.isEqual(userid,user))?status:(status=="SA"?(waitUser?"WL":"AWL"):status);
+
+            const {startDate, email} = this.props;
+            // console.log(id+"-"+date+"-"+startTime+"-"+_id+"-"+zone+"--"+slotDate);
+            children.push(
+              <Cell
+                key={j}
+                status={displayStatus}
+                startDate={startDate}
+                date={date}
+                slotId={_id}
+                slotSerial={id}
+                startTime={startTime}
+                endTime={endTime}
+                user={user}
+                email={email}
+                slotZone={zone}
+                type={this.props.type}
+              />
+            );
+            // console.log("-----Cell Pushed-------");
+            slotDate = moment(slotDate,'YYYY-MM-DD').add(1,'day').format('YYYY-MM-DD');
           }
         }
+        //create rows and add columns
+        table.push(<tr>{children}</tr>);
+        time=moment(time,'hh:mma').add(1,'h').format('hh:mma');
+        table.push(<tr><td>{time}</td></tr>);
+      }
+    }
+    return table;
+  }
 
+  generateRows = () => {
+    let table=[];
+      let userid = localStorage.getItem('userid');
+      if(this.props.type=='zoneSch'){
+          table=this.generateZoneSchedule(userid);
+      }
+      else if(this.props.type=="userSch"){
+          table=this.generateUserSchedule(userid);
       }
       return table;
   }

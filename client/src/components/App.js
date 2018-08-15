@@ -8,7 +8,7 @@ import {bindActionCreators} from 'redux';
 import Header from './Header';
 import Indicator from './Indicator';
 import SchedulingTable from '../containers/SchedulingTable';
-import {fetchZones, getNextWeek, fetchUserSlots} from '../actions/index';
+import {fetchZones, getNextWeek, fetchUserSlots, getUserWaitList} from '../actions/index';
 
 class App extends Component {
   constructor(props){
@@ -37,6 +37,7 @@ class App extends Component {
       if(JSON.stringify(this.props.startDate)!=JSON.stringify(prevProps.startDate))
       {
         this.props.fetchUserSlots(this.props.auth.authenticated.email, moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD'));
+        this.props.getUserWaitList(moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD'));
       }
   }
   render(){
@@ -63,6 +64,8 @@ class App extends Component {
           <SchedulingTable
             startDate={this.props.startDate} endDate={this.props.endDate}
             schedule={this.props.schedule}
+            userWaitList={this.props.userWaitList}
+            zones={this.props.zones}
             email={this.props.auth.authenticated.email}
             type="userSch"
             heading="Your Schedule Across Zones"
@@ -85,7 +88,7 @@ function mapStateToProps(state){
 }
 
 function mapDispatchToProps(dispatch){
-	return bindActionCreators({fetchZones, getNextWeek, fetchUserSlots},dispatch);
+	return bindActionCreators({fetchZones, getNextWeek, fetchUserSlots, getUserWaitList},dispatch);
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(App);

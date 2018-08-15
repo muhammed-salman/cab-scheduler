@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import _ from 'lodash';
-import { AUTH_USER, AUTH_ERROR, USER_LOGOUT, ZONE_SELECTED, ZONE_CHANGE, ZONE_ERROR, UPDATE_SCHEDULE, UPDATE_SLOT, UPDATE_ERROR, ZONES_AVL, START_DATE, END_DATE } from './types';
+import { AUTH_USER, AUTH_ERROR, USER_LOGOUT, USER_WAITLIST, USER_WAITLIST_ERROR, ZONE_SELECTED, ZONE_CHANGE, ZONE_ERROR, UPDATE_SCHEDULE, UPDATE_SLOT, UPDATE_ERROR, ZONES_AVL, START_DATE, END_DATE } from './types';
 
 export const signup = (formProps, callback) => async dispatch => {
   const {email} = formProps;
@@ -32,7 +32,6 @@ export const signin = (formProps, callback) => async dispatch => {
       'http://localhost:3090/userinfo',
       {email}
     );
-
     dispatch({ type: AUTH_USER, payload: {token: response.data.token, email} });
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('email', email);
@@ -43,15 +42,17 @@ export const signin = (formProps, callback) => async dispatch => {
   }
 };
 
-export const signout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('email');
-  localStorage.removeItem('userid');
-  dispatch({ type: AUTH_USER, payload: {token: response.data.token, email} });
-  return {
-    type: AUTH_USER,
-    payload: ''
-  };
+export const signout = () => async dispatch => {
+  try {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    localStorage.removeItem('userid');
+    dispatch({ type: AUTH_USER, payload: ''});
+    dispatch({ type: USER_LOGOUT, payload: '' });
+  }
+    catch (e) {
+      dispatch({ type: AUTH_ERROR, payload: 'Not able to sign out' });
+    }
 };
 
 export const fetchZoneSlots = (name, startDate) => async dispatch => {
@@ -95,9 +96,9 @@ export const fetchZoneSlots = (name, startDate) => async dispatch => {
 export const fetchZones = () => async dispatch => {
   try {
     const response = await axios.post('http://localhost:3090/zonelist',{});
-    var zones = _.map(response.data, function(zone){
-                       return zone.name;});
-    dispatch({ type: ZONES_AVL, payload: zones });
+    // var zones = _.map(response.data, function(zone){
+    //                    return zone.name;});
+    dispatch({ type: ZONES_AVL, payload: response.data });
   } catch (error) {
     console.error(error);
   }
@@ -192,6 +193,46 @@ export const reserveSlot = (email, id) => async dispatch => {
     dispatch({ type: UPDATE_SLOT, payload: response.data });
   } catch (e) {
     dispatch({ type: UPDATE_ERROR, payload: 'User Slot information cannot be updated' });
+  }
+};
+
+export const getUserWaitList = (startDate) => async dispatch => {
+
+  var userWaitList=[], promises=[], temp=[],i,j;
+  try {
+
+    let user = localStorage.getItem('userid');
+
+    for(i=0;i<7;i++){
+
+      const response = await axios.post(
+        'http://localhost:3090/userwaitlist',
+        {user, date: startDate}
+      );
+
+      promises.push(response);
+
+      startDate= moment(startDate,'YYYY-MM-DD').add(1,'day').format('YYYY-MM-DD');
+    }
+
+    await axios.all(promises).then(function(results) {
+
+      results.forEach(function(response) {
+          temp.push(response.data);
+      });
+    });
+
+    for(i=0;i<7;i++){
+      temp[i].forEach((slot)=>{
+        userWaitList.push(slot);
+      });
+    }
+    userWaitList = _.sortBy(userWaitList, ['id', 'date']);
+
+
+    dispatch({ type: USER_WAITLIST, payload: userWaitList });
+  } catch (e) {
+    dispatch({ type: USER_WAITLIST_ERROR, payload: 'User Waitlist Slot information cannot be fetch' });
   }
 };
 

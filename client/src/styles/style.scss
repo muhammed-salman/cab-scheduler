@@ -97,14 +97,32 @@ $deepblue: #1a73e8;
 }
 
 .navigator {
-  a{
-    text-decoration: none;
+  a {
     color: #000;
+    text-decoration: none;
   }
-  a+div{
-    a{
+
+  a+div, a+span {
+    a {
       display: inline-block;
+      font-size: 18pt;
       margin-left: 10px;
     }
+  }
+
+}
+
+.navigator+form{
+  fieldset {
+    font-size: 18pt;
+    label {
+      margin-right: 10px;
+    }
+  }
+
+  button {
+    border: 1px solid #000;
+    border-radius: 2px;
+    font-size: 18pt;
   }
 }

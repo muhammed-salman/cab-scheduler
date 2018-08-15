@@ -1,6 +1,8 @@
 export const AUTH_USER = 'auth_user';
 export const AUTH_ERROR = 'auth_error';
 export const USER_LOGOUT = 'user_logout';
+export const USER_WAITLIST = 'user_waitlist';
+export const USER_WAITLIST_ERROR = 'user_waitlist_error';
 export const ZONE_SELECTED = 'zone_selected';
 export const ZONE_CHANGE = 'zone_change';
 export const ZONE_ERROR = 'zone_error';
