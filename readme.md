@@ -1,6 +1,6 @@
 # A Cab Scheduler App
 
-##Run MongodB service
+## Run MongodB service
 1. Open terminal and type `mongod`. Ensure that the service is installed.
 2. You can see the database graphically using Robo3T. Please go to https://robomongo.org/download
 
