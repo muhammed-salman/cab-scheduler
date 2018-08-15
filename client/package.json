@@ -25,7 +25,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "clean": "rimraf public",
-    "build": "NODE_ENV=production npm run clean && webpack -p",
+    "build": "NODE_ENV=production npm run clean && webpack -p"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

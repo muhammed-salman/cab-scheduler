@@ -74,7 +74,7 @@ class SchedulingTable extends Component {
 
     const {schedule, zones, userWaitList} = this.props;
 
-    if(!_.isEmpty(schedule) && !_.isEmpty(zones) && !_.isEmpty(userWaitList)){
+    if(!_.isEmpty(schedule) && !_.isEmpty(zones)){
       //create rows
       for (let i = 0; i < 14; i++) {
         let slotDate= moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD');
@@ -97,7 +97,7 @@ class SchedulingTable extends Component {
                   }
                 });
                 //if you have the wait slot at same time and date of reserved slot then skip it on status display
-                if( _.isEqual(userWaitList[w].date,slotDate)
+                if(!_.isEmpty(userWaitList) && _.isEqual(userWaitList[w].date,slotDate)
                   && _.isEqual(userWaitList[w].startTime,time))
                   if(w<userWaitList.length-1)
                     w++;
@@ -105,7 +105,7 @@ class SchedulingTable extends Component {
             else {
               // let {status, date, _id, id, startTime, endTime, user, zone} = this.props.userWaitList[w];
 
-              if( _.isEqual(userWaitList[w].date,slotDate)
+              if(  !_.isEmpty(userWaitList) && _.isEqual(userWaitList[w].date,slotDate)
                 && _.isEqual(userWaitList[w].startTime,time))
               {
                 waitUser=true;
