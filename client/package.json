@@ -24,12 +24,8 @@
   },
   "scripts": {
     "start": "nodemon server.js",
-    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
-    "test:watch": "npm run test -- --watch",
     "clean": "rimraf public",
     "build": "NODE_ENV=production npm run clean && webpack -p",
-    "serve": "webpack-dev-server",
-    "deploy": "npm run build && git subtree push --prefix public origin gh-pages"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

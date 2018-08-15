@@ -11,9 +11,15 @@ export const signup = (formProps, callback) => async dispatch => {
       formProps
     );
 
+    const user= await axios.post(
+      'http://localhost:3090/userinfo',
+      {email}
+    );
+
     dispatch({ type: AUTH_USER, payload: {token: response.data.token, email} });
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('email', email);
+    localStorage.setItem('userid', user.data._id);
     callback();
   } catch (e) {
     dispatch({ type: AUTH_ERROR, payload: 'Email in use' });
@@ -36,6 +42,7 @@ export const signin = (formProps, callback) => async dispatch => {
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('email', email);
     localStorage.setItem('userid', user.data._id);
+    // console.log(token,email,userid);
     callback();
   } catch (e) {
     dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' });

@@ -99,6 +99,7 @@ class SchedulingTable extends Component {
                 //if you have the wait slot at same time and date of reserved slot then skip it on status display
                 if( _.isEqual(userWaitList[w].date,slotDate)
                   && _.isEqual(userWaitList[w].startTime,time))
+                  if(w<userWaitList.length-1)
                     w++;
             }
             else {

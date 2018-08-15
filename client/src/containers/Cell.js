@@ -40,7 +40,7 @@ class Cell extends Component {
   async interUserSlotClash(zone,startTime,date){
     try {
       let id = localStorage.getItem("userid");
-      console.log('inside interUserSlotClash',zone,startTime,date);
+      // console.log('inside interUserSlotClash',zone,startTime,date);
       const slot = await axios.post(
         'http://localhost:3090/slotbydatetime',
         {name: zone,startTime,date}
