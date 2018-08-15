@@ -74,7 +74,7 @@ class SchedulingTable extends Component {
 
     const {schedule, zones, userWaitList} = this.props;
 
-    if(!_.isEmpty(schedule) && !_.isEmpty(zones)){
+    if(!_.isEmpty(zones)){
       //create rows
       for (let i = 0; i < 14; i++) {
         let slotDate= moment(this.props.startDate,'Do MMM, YYYY').format('YYYY-MM-DD');
@@ -86,9 +86,12 @@ class SchedulingTable extends Component {
           else{
             // console.log('slotDate:',slotDate);
             let waitUser=false;
-            let {status, date, _id, id, startTime, endTime, user, zone} = this.props.schedule[k];
+            if(!_.isEmpty(schedule))
+              var {status, date, _id, id, startTime, endTime, user, zone} = schedule[k];
+            else
+              var status, date, _id, id, startTime, endTime, user, zone;
 
-            if(_.isEqual(date,slotDate)&&_.isEqual(startTime,time)){
+            if(!_.isEmpty(schedule) && _.isEqual(date,slotDate)&&_.isEqual(startTime,time)){
               if(k<this.props.schedule.length-1)
                 k++;
                 zones.forEach((obj) =>{
