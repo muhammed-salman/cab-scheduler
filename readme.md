@@ -1,5 +1,13 @@
 # A Cab Scheduler App
 
+- Assume that there is a cab service.
+- At the start of the week the schedule for the next week is prepared.
+- The schedule has hourly shifts from 8am to 10pm on daily basis.
+- Each shift has slots for number of drivers needed for duty for that hour from various geographic areas called zones (eg. South Mumbai, Bandra, Andheri, Navi Mumbai, etc).
+- On Each Friday at 10:55am, the next week's schedule is published to drivers so they can grab the shift.
+- A driver cannot take same shift from two zones. 
+- If no slots are available for a shift, the driver gets into the waiting list.
+
 # Demo
 https://www.youtube.com/watch?v=dWYOSnQyaAg
 
